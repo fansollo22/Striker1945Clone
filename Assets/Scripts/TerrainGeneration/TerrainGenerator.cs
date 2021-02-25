@@ -12,7 +12,7 @@ public class TerrainGenerator : MonoBehaviour
 
     FastNoise noise = new FastNoise();
 
-    int chunkDist = 5;
+    int chunkDist = 10;
 
     List<TerrainChunk> pooledChunks = new List<TerrainChunk>();
 
@@ -53,7 +53,6 @@ public class TerrainGenerator : MonoBehaviour
             for(int z = 0; z < TerrainChunk.chunkWidth+2; z++)
                 for(int y = 0; y < TerrainChunk.chunkHeight; y++)
                 {
-                    //if(Mathf.PerlinNoise((xPos + x-1) * .1f, (zPos + z-1) * .1f) * 10 + y < TerrainChunk.chunkHeight * .5f)
                     chunk.blocks[x, y, z] = GetBlockType(xPos+x-1, y, zPos+z-1);
                 }
 
@@ -70,6 +69,8 @@ public class TerrainGenerator : MonoBehaviour
 
 
         chunks.Add(new ChunkPos(xPos, zPos), chunk);
+
+        chunk.transform.parent = gameObject.transform;
     }
 
 
@@ -149,8 +150,8 @@ public class TerrainGenerator : MonoBehaviour
     void LoadChunks(bool instant = false)
     {
         //the current chunk the player is in
-        int curChunkPosX = Mathf.FloorToInt(player.position.x/16)*16;
-        int curChunkPosZ = Mathf.FloorToInt(player.position.z/16)*16;
+        int curChunkPosX = Mathf.FloorToInt((player.position.x)/16)*16;
+        int curChunkPosZ = Mathf.FloorToInt((player.position.z) /16)*16;
 
         //entered a new chunk
         if(curChunk.x != curChunkPosX || curChunk.z != curChunkPosZ)
@@ -170,6 +171,7 @@ public class TerrainGenerator : MonoBehaviour
                             BuildChunk(i, j);
                         else
                             toGenerate.Add(cp);
+                            
                     }
                      
 
