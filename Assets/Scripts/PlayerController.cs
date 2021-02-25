@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private Quaternion originalRot;
     private Rigidbody rb;
 
+    // Screen Clamping
     public Camera MainCamera; //be sure to assign this in the inspector to your main camera
     private Vector2 screenBounds;
     private float objectWidth;
@@ -24,29 +25,18 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         originalRot = transform.localRotation;
 
-
-        screenBounds = MainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, MainCamera.transform.position.z));
-        //objectWidth = 0.1; //extents = size of width / 2
-        //objectHeight = 0.1; //extents = size of height / 2
+        screenBounds = MainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 20));
     }
 
     void FixedUpdate()
     {
-        airplaneMovement();
+        AirplaneMovement();
     }
 
-        // Update is called once per frame
-    void LateUpdate()
-    {
-        //restrictPlaneToCamera();
-    }
-
-    void airplaneMovement()
+    void AirplaneMovement()
     {
         Vector3 targetVelocity = new Vector3(-Input.GetAxis("Horizontal"), 0, -Input.GetAxis("Vertical"));
-        //Debug.Log(moveBack);
 
-        //Debug.Log(targetVelocity);
         targetVelocity = transform.TransformDirection(targetVelocity);
         targetVelocity *= speed;
 
@@ -56,13 +46,32 @@ public class PlayerController : MonoBehaviour
         velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
         velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
         velocityChange.y = 0;
-        //Debug.Log(-Input.GetAxis("Vertical"));
+
         rb.AddForce(velocityChange, ForceMode.VelocityChange);
-        rotateBasedOnMovement();
+        ClampToCamera();
+        RotateBasedOnMovement();
+    }
+
+    void ClampToCamera()
+    {
+        float dist = 20.5f;
+        float initialHeight = transform.position.y;
+        Vector3 localPos = MainCamera.transform.InverseTransformPoint(transform.position);
+        Vector3 leftBottom = MainCamera.ViewportToWorldPoint(new Vector3(0, 0, dist));
+        Vector3 rightTop = MainCamera.ViewportToWorldPoint(new Vector3(1, 1, dist));
+        leftBottom = MainCamera.transform.InverseTransformPoint(leftBottom);
+        rightTop = MainCamera.transform.InverseTransformPoint(rightTop);
+
+        float x = Mathf.Clamp(localPos.x, leftBottom.x, rightTop.x);
+        float y = Mathf.Clamp(localPos.y, leftBottom.y, rightTop.y);
+
+        Vector3 correctionPos = MainCamera.transform.TransformPoint(new Vector3(x, y, localPos.z));
+        correctionPos.y = initialHeight;
+        transform.position = correctionPos;
     }
 
 
-    void rotateBasedOnMovement()
+    void RotateBasedOnMovement()
     {
         if(Input.GetAxis("Horizontal") != 0)
         {

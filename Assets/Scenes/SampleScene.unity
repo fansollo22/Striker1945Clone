@@ -346,8 +346,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 767333622}
-  - component: {fileID: 767333623}
   - component: {fileID: 767333624}
+  - component: {fileID: 767333623}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -363,7 +363,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767333621}
   m_LocalRotation: {x: 0.000000026064583, y: -0.7071082, z: 0.000000009312312, w: 0.7071053}
-  m_LocalPosition: {x: 90, y: 80, z: 95.2}
+  m_LocalPosition: {x: 90.78, y: 120, z: 95.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 963194228}
@@ -411,7 +411,6 @@ GameObject:
   - component: {fileID: 888243747}
   - component: {fileID: 888243748}
   - component: {fileID: 888243749}
-  - component: {fileID: 888243750}
   m_Layer: 0
   m_Name: PlaneModel
   m_TagString: Untagged
@@ -469,19 +468,6 @@ MonoBehaviour:
   maxVelocityChange: 10
   maxAngleH: 15
   angleChangeSpeed: 5
-  MainCamera: {fileID: 963194227}
---- !u!114 &888243750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 888243746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e76b013b747594c4290099d36a175a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   MainCamera: {fileID: 963194227}
 --- !u!1 &889126155
 GameObject:
@@ -694,7 +680,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 100
+  far clip plane: 1000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1150,7 +1136,7 @@ PrefabInstance:
       objectReference: {fileID: 767333622}
     - target: {fileID: 5978433314777789453, guid: 378e0baf01788c84ab1c881968aa1e58, type: 3}
       propertyPath: chunksSpeed
-      value: 7
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5978433314777789454, guid: 378e0baf01788c84ab1c881968aa1e58, type: 3}
       propertyPath: m_LocalPosition.x
