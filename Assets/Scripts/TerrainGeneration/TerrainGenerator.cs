@@ -20,6 +20,10 @@ public class TerrainGenerator : MonoBehaviour
 
     public float chunksSpeed = 1f;
 
+    public bool infiniteOcean = false;
+
+    public bool isCity = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,8 +60,8 @@ public class TerrainGenerator : MonoBehaviour
                     chunk.blocks[x, y, z] = GetBlockType(xPos+x-1, y, zPos+z-1);
                 }
 
-
-        GenerateTrees(chunk.blocks, xPos, zPos);
+        if(!infiniteOcean && !isCity)
+            GenerateTrees(chunk.blocks, xPos, zPos);
 
         chunk.BuildMesh();
 
@@ -65,8 +69,6 @@ public class TerrainGenerator : MonoBehaviour
         WaterChunk wat = chunk.transform.GetComponentInChildren<WaterChunk>();
         wat.SetLocs(chunk.blocks);
         wat.BuildMesh();
-        
-
 
         chunks.Add(new ChunkPos(xPos, zPos), chunk);
 
@@ -77,14 +79,6 @@ public class TerrainGenerator : MonoBehaviour
     //get the block type at a specific coordinate
     BlockType GetBlockType(int x, int y, int z)
     {
-        /*if(y < 33)
-            return BlockType.Dirt;
-        else
-            return BlockType.Air;*/
-
-        
-
-
         //print(noise.GetSimplex(x, z));
         float simplex1 = noise.GetSimplex(x*.8f, z*.8f)*10;
         float simplex2 = noise.GetSimplex(x * 3f, z * 3f) * 10*(noise.GetSimplex(x*.3f, z*.3f)+.5f);
@@ -109,7 +103,19 @@ public class TerrainGenerator : MonoBehaviour
         //float cliffThing = noise.GetSimplex(x * 1f, z * 1f, y) * 10;
         //float cliffThingMask = noise.GetSimplex(x * .4f, z * .4f) + .3f;
 
+        if (infiniteOcean)
+        {
+            baseLandHeight = 26;
+            baseStoneHeight = 100;
+        }
+           
 
+        if(isCity)
+        {
+            baseLandHeight = 60;
+            baseStoneHeight = 0;
+        }
+            
 
         BlockType blockType = BlockType.Air;
 
@@ -128,19 +134,6 @@ public class TerrainGenerator : MonoBehaviour
             if(y <= baseStoneHeight)
                 blockType = BlockType.Stone;
         }
-
-
-       /* if(caveNoise1 > Mathf.Max(caveMask, .2f))
-            blockType = BlockType.Air;*/
-
-        /*if(blockType != BlockType.Air)
-            blockType = BlockType.Stone;*/
-
-        //if(blockType == BlockType.Air && noise.GetSimplex(x * 4f, y * 4f, z*4f) < 0)
-          //  blockType = BlockType.Dirt;
-
-        //if(Mathf.PerlinNoise(x * .1f, z * .1f) * 10 + y < TerrainChunk.chunkHeight * .5f)
-        //    return BlockType.Grass;
 
         return blockType;
     }
