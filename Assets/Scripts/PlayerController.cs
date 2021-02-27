@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 10.0f;
-    public float maxVelocityChange = 10.0f;
+    public float speed = 20.0f;
 
     public float maxAngleH;
     public float angleChangeSpeed;
+
+    public GameObject movingContainer;
+    public float containerSpeed;
     
     private Quaternion originalRot;
     private Rigidbody rb;
@@ -24,39 +26,34 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         originalRot = transform.localRotation;
-
         screenBounds = MainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 20));
+    }
+
+    void Update()
+    {
+        MoveContainer();
     }
 
     void FixedUpdate()
     {
         AirplaneMovement();
+        RotateBasedOnMovement();
     }
 
     void AirplaneMovement()
     {
-        Vector3 targetVelocity = new Vector3(-Input.GetAxis("Horizontal"), 0, -Input.GetAxis("Vertical"));
-
-        targetVelocity = transform.TransformDirection(targetVelocity);
-        targetVelocity *= speed;
-
-        // Apply a force that attempts to reach our target velocity
-        Vector3 velocity = rb.velocity;
-        Vector3 velocityChange = (targetVelocity - velocity);
-        velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
-        velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-        velocityChange.y = 0;
-
-        rb.AddForce(velocityChange, ForceMode.VelocityChange);
-        ClampToCamera();
-        RotateBasedOnMovement();
+        Vector3 v = new Vector3(Input.GetAxis("Vertical") , 0, -Input.GetAxis("Horizontal")) * speed * Time.deltaTime;
+        Vector3 pos = transform.position + v;
+        Vector3 clamp = ClampToCamera(pos);
+        
+        transform.position = clamp;
     }
 
-    void ClampToCamera()
+    Vector3 ClampToCamera(Vector3 playerPos)
     {
         float dist = 20.5f;
-        float initialHeight = transform.position.y;
-        Vector3 localPos = MainCamera.transform.InverseTransformPoint(transform.position);
+        float initialHeight = playerPos.y;
+        Vector3 localPos = MainCamera.transform.InverseTransformPoint(playerPos);
         Vector3 leftBottom = MainCamera.ViewportToWorldPoint(new Vector3(0, 0, dist));
         Vector3 rightTop = MainCamera.ViewportToWorldPoint(new Vector3(1, 1, dist));
         leftBottom = MainCamera.transform.InverseTransformPoint(leftBottom);
@@ -64,12 +61,15 @@ public class PlayerController : MonoBehaviour
 
         float x = Mathf.Clamp(localPos.x, leftBottom.x, rightTop.x);
         float y = Mathf.Clamp(localPos.y, leftBottom.y, rightTop.y);
-
         Vector3 correctionPos = MainCamera.transform.TransformPoint(new Vector3(x, y, localPos.z));
         correctionPos.y = initialHeight;
-        transform.position = correctionPos;
+        return correctionPos;
     }
 
+    void MoveContainer()
+    {
+        movingContainer.transform.Translate(-Vector3.forward * Time.deltaTime * containerSpeed);
+    }
 
     void RotateBasedOnMovement()
     {

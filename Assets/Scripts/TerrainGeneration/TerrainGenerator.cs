@@ -173,8 +173,6 @@ public class TerrainGenerator : MonoBehaviour
                             toGenerate.Add(cp);
                             
                     }
-                     
-
                 }
 
             //remove chunks that are too far away
@@ -276,8 +274,6 @@ public class TerrainGenerator : MonoBehaviour
         }
 
     }
-
-
 }
 
 
