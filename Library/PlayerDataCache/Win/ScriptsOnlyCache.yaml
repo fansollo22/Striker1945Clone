@@ -2,7 +2,6 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - BladeSpin
-    - CameraController
     - GunScript
     - PlayerController
     - ProjectileScript
@@ -25,8 +24,6 @@ ScriptsOnlyBuild:
     - UnityEditor.TestTools.TestRunner.TestListCacheData
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
     UnityEngine.UI.dll:
-    - UnityEngine.EventSystems.EventSystem
-    - UnityEngine.EventSystems.StandaloneInputModule
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Text
@@ -77,11 +74,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12206}
     - Class: 114
-      Script: {instanceID: 12388}
-    - Class: 114
       Script: {instanceID: 12580}
-    - Class: 114
-      Script: {instanceID: 12598}
     - Class: 114
       Script: {instanceID: 13388}
     - Class: 114
@@ -90,8 +83,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 13710}
     - Class: 114
       Script: {instanceID: 13770}
-    - Class: 114
-      Script: {instanceID: 13782}
     - Class: 114
       Script: {instanceID: 13852}
     - Class: 115
@@ -525,7 +516,7 @@ ScriptsOnlyBuild:
     className: Outline
   - hash:
       serializedVersion: 2
-      Hash: 7a3171431badda59cae855b2cad6f09b
+      Hash: f5103f21824e5baadb869c8a4adfc0dc
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
